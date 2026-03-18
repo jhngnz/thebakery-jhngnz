@@ -3,20 +3,403 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
     <title>The Bakery</title>
-
-
-    <!-- TODO: Update og:title to match your application name -->
     <meta property="og:title" content="The Bakery" />
     <meta property="og:type" content="website" />
-
     <meta name="twitter:card" content="summary_large_image" />
-
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: 'hsl(36, 33%, 97%)',
+              foreground: 'hsl(25, 30%, 12%)',
+              card: 'hsl(36, 30%, 95%)',
+              'card-foreground': 'hsl(25, 30%, 12%)',
+              popover: 'hsl(36, 33%, 97%)',
+              'popover-foreground': 'hsl(25, 30%, 12%)',
+              primary: 'hsl(25, 55%, 28%)',
+              'primary-foreground': 'hsl(36, 33%, 97%)',
+              secondary: 'hsl(36, 40%, 88%)',
+              'secondary-foreground': 'hsl(25, 30%, 12%)',
+              muted: 'hsl(36, 25%, 91%)',
+              'muted-foreground': 'hsl(25, 15%, 45%)',
+              accent: 'hsl(30, 70%, 50%)',
+              'accent-foreground': 'hsl(36, 33%, 97%)',
+              destructive: 'hsl(0, 84.2%, 60.2%)',
+              'destructive-foreground': 'hsl(210, 40%, 98%)',
+              border: 'hsl(30, 20%, 85%)',
+              input: 'hsl(30, 20%, 85%)',
+              ring: 'hsl(25, 55%, 28%)',
+              warm: 'hsl(30, 60%, 92%)',
+              'warm-foreground': 'hsl(25, 40%, 20%)',
+            },
+            fontFamily: {
+              display: ['Playfair Display', 'serif'],
+              body: ['Lora', 'serif'],
+            },
+            borderRadius: {
+              DEFAULT: '0.5rem',
+            },
+          },
+        },
+      }
+    </script>
+    
+    <style>
+      @layer base {
+        html {
+          scroll-behavior: smooth;
+        }
+        
+        body {
+          background-color: hsl(36, 33%, 97%);
+          color: hsl(25, 30%, 12%);
+        }
+      }
+    </style>
   </head>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="bg-background text-foreground">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-foreground/80 backdrop-blur-md">
+      <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+        <a href="#" class="font-display text-xl text-primary-foreground font-semibold">
+          The Bakery
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#mission" class="text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase transition-colors">
+            Mission
+          </a>
+          <a href="#history" class="text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase transition-colors">
+            Our Story
+          </a>
+          <a href="#team" class="text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase transition-colors">
+            Team
+          </a>
+          <a href="#products" class="text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase transition-colors">
+            Products
+          </a>
+        </div>
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden text-primary-foreground"
+          aria-label="Toggle menu"
+        >
+          <svg id="menu-icon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden bg-foreground/95 backdrop-blur-md px-6 pb-6 space-y-4">
+        <a href="#mission" class="block text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase" onclick="toggleMobileMenu()">
+          Mission
+        </a>
+        <a href="#history" class="block text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase" onclick="toggleMobileMenu()">
+          Our Story
+        </a>
+        <a href="#team" class="block text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase" onclick="toggleMobileMenu()">
+          Team
+        </a>
+        <a href="#products" class="block text-primary-foreground/80 hover:text-primary-foreground font-body text-sm tracking-wider uppercase" onclick="toggleMobileMenu()">
+          Products
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden pt-16">
+      <div class="absolute inset-0">
+        <div class="w-full h-full bg-gradient-to-r from-foreground/50 to-foreground/50 bg-cover bg-center" style="background-image: linear-gradient(to right, rgba(37, 48, 19, 0.5), rgba(37, 48, 19, 0.5)), url('./public/hero-bakery.jpg'); background-size: cover; background-position: center;"></div>
+      </div>
+      <div class="relative z-10 text-center max-w-3xl mx-auto px-6">
+        <p class="text-primary-foreground/80 font-body text-lg tracking-widest uppercase mb-4">
+          Est. 1998
+        </p>
+        <h1 class="font-display text-5xl md:text-7xl lg:text-8xl text-primary-foreground font-bold leading-tight mb-6">
+          The Bakery
+        </h1>
+        <p class="text-primary-foreground/90 font-body text-xl md:text-2xl italic mb-8">
+          Handcrafted breads & pastries, baked with love since 1998
+        </p>
+        <a
+          href="#mission"
+          class="inline-block border-2 border-primary-foreground text-primary-foreground px-8 py-3 text-sm tracking-widest uppercase font-body hover:bg-primary-foreground hover:text-foreground transition-all duration-300"
+        >
+          Discover Our Story
+        </a>
+      </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section id="mission" class="py-24 px-6 bg-background">
+      <div class="max-w-5xl mx-auto">
+        <p class="text-accent text-sm tracking-widest uppercase text-center mb-3 font-body">
+          What Drives Us
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-foreground text-center mb-16">
+          Mission & Vision
+        </h2>
+        <div class="grid md:grid-cols-2 gap-16">
+          <div class="space-y-6">
+            <div class="w-12 h-[2px] bg-accent"></div>
+            <h3 class="font-display text-2xl text-foreground">Our Mission</h3>
+            <p class="text-muted-foreground font-body leading-relaxed text-lg">
+              To craft exceptional artisan breads and pastries using time-honored techniques and the finest locally-sourced ingredients. We believe that every loaf tells a story — of patience, of tradition, and of the hands that shaped it. Our mission is to nourish our community with honest, wholesome baked goods made without shortcuts.
+            </p>
+          </div>
+          <div class="space-y-6">
+            <div class="w-12 h-[2px] bg-accent"></div>
+            <h3 class="font-display text-2xl text-foreground">Our Vision</h3>
+            <p class="text-muted-foreground font-body leading-relaxed text-lg">
+              To become the heart of every neighborhood we serve — a place where the aroma of fresh bread brings people together. We envision a future where artisan baking thrives, where sustainable practices are the standard, and where every bite carries the warmth of a hand-crafted tradition passed down through generations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- History Section -->
+    <section id="history" class="py-24 px-6 bg-secondary">
+      <div class="max-w-4xl mx-auto">
+        <p class="text-accent text-sm tracking-widest uppercase text-center mb-3 font-body">
+          Where It All Began
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-foreground text-center mb-16">
+          Our Story
+        </h2>
+        <div class="relative">
+          <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-border md:-translate-x-[1px]"></div>
+          <div class="space-y-12">
+            <!-- Timeline Item 1 -->
+            <div class="relative flex items-start gap-8 md:flex-row">
+              <div class="hidden md:block md:w-1/2"></div>
+              <div class="absolute left-4 md:left-1/2 w-3 h-3 bg-accent rounded-full -translate-x-[5px] md:-translate-x-[6px] mt-2 ring-4 ring-secondary"></div>
+              <div class="pl-12 md:pl-0 md:w-1/2">
+                <span class="text-accent font-display text-lg font-semibold">1998</span>
+                <h3 class="font-display text-xl text-foreground mt-1">A Dream Takes Shape</h3>
+                <p class="text-muted-foreground font-body mt-2 leading-relaxed">Elena & Marco Rossi open a small bread oven in their garage, selling loaves at the local farmer's market.</p>
+              </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="relative flex items-start gap-8 md:flex-row-reverse">
+              <div class="hidden md:block md:w-1/2"></div>
+              <div class="absolute left-4 md:left-1/2 w-3 h-3 bg-accent rounded-full -translate-x-[5px] md:-translate-x-[6px] mt-2 ring-4 ring-secondary"></div>
+              <div class="pl-12 md:pl-0 md:w-1/2">
+                <span class="text-accent font-display text-lg font-semibold">2003</span>
+                <h3 class="font-display text-xl text-foreground mt-1">Our First Storefront</h3>
+                <p class="text-muted-foreground font-body mt-2 leading-relaxed">After years of growing demand, The Bakery opens its doors on Elm Street with a team of three passionate bakers.</p>
+              </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="relative flex items-start gap-8 md:flex-row">
+              <div class="hidden md:block md:w-1/2"></div>
+              <div class="absolute left-4 md:left-1/2 w-3 h-3 bg-accent rounded-full -translate-x-[5px] md:-translate-x-[6px] mt-2 ring-4 ring-secondary"></div>
+              <div class="pl-12 md:pl-0 md:w-1/2">
+                <span class="text-accent font-display text-lg font-semibold">2010</span>
+                <h3 class="font-display text-xl text-foreground mt-1">Award-Winning Sourdough</h3>
+                <p class="text-muted-foreground font-body mt-2 leading-relaxed">Our signature sourdough wins 'Best Artisan Bread' at the National Bakers' Guild competition.</p>
+              </div>
+            </div>
+
+            <!-- Timeline Item 4 -->
+            <div class="relative flex items-start gap-8 md:flex-row-reverse">
+              <div class="hidden md:block md:w-1/2"></div>
+              <div class="absolute left-4 md:left-1/2 w-3 h-3 bg-accent rounded-full -translate-x-[5px] md:-translate-x-[6px] mt-2 ring-4 ring-secondary"></div>
+              <div class="pl-12 md:pl-0 md:w-1/2">
+                <span class="text-accent font-display text-lg font-semibold">2016</span>
+                <h3 class="font-display text-xl text-foreground mt-1">The Pastry Workshop</h3>
+                <p class="text-muted-foreground font-body mt-2 leading-relaxed">We expand with a dedicated pastry kitchen, introducing French-inspired croissants, tarts, and seasonal specials.</p>
+              </div>
+            </div>
+
+            <!-- Timeline Item 5 -->
+            <div class="relative flex items-start gap-8 md:flex-row">
+              <div class="hidden md:block md:w-1/2"></div>
+              <div class="absolute left-4 md:left-1/2 w-3 h-3 bg-accent rounded-full -translate-x-[5px] md:-translate-x-[6px] mt-2 ring-4 ring-secondary"></div>
+              <div class="pl-12 md:pl-0 md:w-1/2">
+                <span class="text-accent font-display text-lg font-semibold">2024</span>
+                <h3 class="font-display text-xl text-foreground mt-1">A Community Institution</h3>
+                <p class="text-muted-foreground font-body mt-2 leading-relaxed">Now with 25 bakers and two locations, The Bakery continues to serve the community with the same love and craft.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-24 px-6 bg-background">
+      <div class="max-w-5xl mx-auto">
+        <p class="text-accent text-sm tracking-widest uppercase text-center mb-3 font-body">
+          The People Behind the Bread
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-foreground text-center mb-16">
+          Our Founders
+        </h2>
+        <div class="grid md:grid-cols-2 gap-12">
+          <!-- Team Member 1 -->
+          <div class="group">
+            <div class="overflow-hidden rounded-sm mb-6 bg-secondary flex items-center justify-center h-80">
+              <div class="text-5xl font-display text-secondary-foreground opacity-40">ER</div>
+            </div>
+            <h3 class="font-display text-2xl text-foreground">Elena Rossi</h3>
+            <p class="text-accent font-body text-sm tracking-wider uppercase mt-1">Co-Founder & Head Baker</p>
+            <p class="text-muted-foreground font-body mt-4 leading-relaxed">Elena grew up kneading dough alongside her grandmother in a small Tuscan kitchen. Her passion for traditional bread-making led her to study at the Culinary Institute of Florence before bringing those old-world techniques to The Bakery.</p>
+          </div>
+
+          <!-- Team Member 2 -->
+          <div class="group">
+            <div class="overflow-hidden rounded-sm mb-6 bg-secondary flex items-center justify-center h-80">
+              <div class="text-5xl font-display text-secondary-foreground opacity-40">MR</div>
+            </div>
+            <h3 class="font-display text-2xl text-foreground">Marco Rossi</h3>
+            <p class="text-accent font-body text-sm tracking-wider uppercase mt-1">Co-Founder & Pastry Chef</p>
+            <p class="text-muted-foreground font-body mt-4 leading-relaxed">A trained pastry chef with over 20 years of experience, Marco perfected his craft in Parisian patisseries before returning home to co-found The Bakery. His croissants are legendary — crisp, buttery, and endlessly flaky.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-24 px-6 bg-secondary">
+      <div class="max-w-6xl mx-auto">
+        <p class="text-accent text-sm tracking-widest uppercase text-center mb-3 font-body">
+          Baked Fresh Daily
+        </p>
+        <h2 class="font-display text-4xl md:text-5xl text-foreground text-center mb-16">
+          Our Products
+        </h2>
+        <div class="grid md:grid-cols-2 gap-10">
+          <!-- Product Card 1 -->
+          <div class="bg-card rounded-sm overflow-hidden group">
+            <div class="overflow-hidden h-64 bg-muted">
+              <img src="./public/product-bread.jpg" alt="Artisan Breads" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <div class="p-8">
+              <h3 class="font-display text-2xl text-card-foreground mb-3">Artisan Breads</h3>
+              <p class="text-muted-foreground font-body leading-relaxed mb-4">From our signature sourdough to rustic ciabatta and hearty rye, every loaf is slow-fermented for at least 24 hours and baked in our stone-deck oven.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Sourdough Boule</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Ciabatta</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Country Rye</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Olive Focaccia</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="bg-card rounded-sm overflow-hidden group">
+            <div class="overflow-hidden h-64 bg-muted">
+              <img src="./public/product-pastries.jpg" alt="French Pastries" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <div class="p-8">
+              <h3 class="font-display text-2xl text-card-foreground mb-3">French Pastries</h3>
+              <p class="text-muted-foreground font-body leading-relaxed mb-4">Handmade with imported French butter, our pastries are laminated over three days for the perfect flaky, golden layers that shatter with every bite.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Classic Croissant</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Pain au Chocolat</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Almond Croissant</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Danish Pastries</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="bg-card rounded-sm overflow-hidden group">
+            <div class="overflow-hidden h-64 bg-muted">
+              <img src="./public/product-cakes.jpg" alt="Celebration Cakes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <div class="p-8">
+              <h3 class="font-display text-2xl text-card-foreground mb-3">Celebration Cakes</h3>
+              <p class="text-muted-foreground font-body leading-relaxed mb-4">Custom-designed cakes for every occasion — birthdays, weddings, and milestones. Each cake is made from scratch with seasonal fruits and natural flavors.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Berry Layer Cake</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Chocolate Ganache</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Carrot Cake</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Wedding Cakes</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 4 -->
+          <div class="bg-card rounded-sm overflow-hidden group">
+            <div class="overflow-hidden h-64 bg-muted">
+              <img src="./public/product-cookies.jpg" alt="Cookies & Biscotti" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <div class="p-8">
+              <h3 class="font-display text-2xl text-card-foreground mb-3">Cookies & Biscotti</h3>
+              <p class="text-muted-foreground font-body leading-relaxed mb-4">Crispy, chewy, and irresistible. Our cookies are made in small batches using real butter, dark chocolate, and toasted nuts.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Chocolate Chip</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Almond Biscotti</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Oatmeal Raisin</span>
+                <span class="text-xs font-body tracking-wider uppercase bg-secondary text-secondary-foreground px-3 py-1 rounded-full">Shortbread</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-foreground text-primary-foreground py-16 px-6">
+      <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-12">
+        <div>
+          <h3 class="font-display text-2xl mb-4">The Bakery</h3>
+          <p class="font-body text-primary-foreground/70 leading-relaxed">
+            Handcrafted breads & pastries, baked with love since 1998.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-display text-lg mb-4">Visit Us</h4>
+          <p class="font-body text-primary-foreground/70 leading-relaxed">
+            42 Street<br />
+            Mangaldan<br />
+            Mon–Sat: 7am – 6pm<br />
+            Sun: 8am – 2pm
+          </p>
+        </div>
+        <div>
+          <h4 class="font-display text-lg mb-4">Contact</h4>
+          <p class="font-body text-primary-foreground/70 leading-relaxed">
+            hello@thebakery.com<br />
+            09123456789
+          </p>
+        </div>
+      </div>
+      <div class="max-w-5xl mx-auto mt-12 pt-8 border-t border-primary-foreground/20 text-center">
+        <p class="font-body text-primary-foreground/50 text-sm">
+          © 2026 The Bakery. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        
+        mobileMenu.classList.toggle('hidden');
+        
+        if (mobileMenu.classList.contains('hidden')) {
+          menuIcon.innerHTML = '<path d="M4 6h16M4 12h16M4 18h16" />';
+        } else {
+          menuIcon.innerHTML = '<path d="M6 6l12 12M6 18L18 6" />';
+        }
+      }
+
+      document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+    </script>
   </body>
 </html>
